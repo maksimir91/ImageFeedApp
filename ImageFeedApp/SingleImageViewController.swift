@@ -9,6 +9,7 @@ import UIKit
 
 final class SingleImageViewController: UIViewController {
     
+    // MARK: - Properties
     var image: UIImage! {
         didSet {
             guard isViewLoaded else { return }
@@ -20,24 +21,13 @@ final class SingleImageViewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
     
+    // MARK: - Functions
     override func viewDidLoad() {
         super.viewDidLoad()
         imageView.image = image
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
         rescaleAndCenterImageInScrollView(image: image)
-    }
-    
-    @IBAction private func didTapBackButton() {
-        dismiss(animated: true,completion: nil)
-    }
-    
-    @IBAction func didTapShareButton(_ sender: UIButton) {
-        let share = UIActivityViewController(
-            activityItems: [image!],
-            applicationActivities: nil
-        )
-        present(share, animated: true, completion: nil)
     }
     
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
@@ -56,8 +46,22 @@ final class SingleImageViewController: UIViewController {
         let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
     }
+    
+    // MARK: - Actions
+    @IBAction private func didTapBackButton() {
+        dismiss(animated: true,completion: nil)
+    }
+    
+    @IBAction func didTapShareButton(_ sender: UIButton) {
+        let share = UIActivityViewController(
+            activityItems: [image!],
+            applicationActivities: nil
+        )
+        present(share, animated: true, completion: nil)
+    }
 }
 
+// MARK: - ScrollView Delegate
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         imageView
